@@ -824,6 +824,11 @@ watchpack@^2.4.0:
     glob-to-regexp "^0.4.1"
     graceful-fs "^4.1.2"
 
+webgl-strict-types@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/webgl-strict-types/-/webgl-strict-types-1.0.5.tgz#588019cd45a8ba797619ca4865a51c522b9a6a72"
+  integrity sha512-i/DSt65qcmThkFvaZ/HmA1V5rZIPv4a6Wh0aK0NNo/axQwdA50w0jHI1HBXFQHKdVytJKidIWV5ouZwWogI4qw==
+
 webpack-cli@^4.10.0:
   version "4.10.0"
   resolved "https://registry.yarnpkg.com/webpack-cli/-/webpack-cli-4.10.0.tgz#37c1d69c8d85214c5a65e589378f53aec64dab31"

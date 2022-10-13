@@ -8,5 +8,6 @@
     "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node"
-  }
+  },
+  "includes": ["node_modules/webgl-strict-types/index.d.ts"]
 }
