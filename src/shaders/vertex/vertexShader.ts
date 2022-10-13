@@ -24,6 +24,8 @@ export const VERTEX_SHADER_TEXT = [
       );
       return;
     }
+
+    
   
     return vertexShader
   };
