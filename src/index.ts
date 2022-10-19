@@ -9,9 +9,9 @@ export const start = function () {
   const gl = setupGL();
 
   bindBuffer(gl, TRIANGLE_VERTICES);
-  
+
   const program = setupProgram(gl);
-  
+
   gl.useProgram(program);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 };
