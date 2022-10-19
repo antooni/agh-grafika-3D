@@ -9,3 +9,12 @@ export const createView = () => {
   GLM.mat4.lookAt(view, cam_pos, cam_front, cam_up)
   return view
 }
+
+export const setupView = (
+  gl: WebGLRenderingContextStrict,
+  program: WebGLProgram,
+  view: GLM.mat4,
+) => {
+  const uniformView = gl.getUniformLocation(program, 'view')
+  gl.uniformMatrix4fv(uniformView, false, view)
+}

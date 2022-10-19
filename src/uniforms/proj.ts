@@ -11,3 +11,12 @@ export const createProj = (gl: WebGLRenderingContextStrict) => {
   )
   return proj
 }
+
+export const setupProj = (
+  gl: WebGLRenderingContextStrict,
+  program: WebGLProgram,
+  proj: GLM.mat4,
+) => {
+  var uniformProj = gl.getUniformLocation(program, 'proj')
+  gl.uniformMatrix4fv(uniformProj, false, proj)
+}

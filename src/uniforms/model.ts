@@ -6,3 +6,12 @@ export const createModel = () => {
   GLM.mat4.rotate(model, model, kat_obrotu, [0, 0, 1])
   return model
 }
+
+export const setupModel = (
+  gl: WebGLRenderingContextStrict,
+  program: WebGLProgram,
+  model: GLM.mat4,
+) => {
+  const uniformModel = gl.getUniformLocation(program, 'model')
+  gl.uniformMatrix4fv(uniformModel, false, model)
+}
