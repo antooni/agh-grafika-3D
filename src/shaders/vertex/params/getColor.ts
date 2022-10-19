@@ -1,9 +1,9 @@
 export const getVertexColor = (
   gl: WebGLRenderingContextStrict,
-  program: WebGLProgram
+  program: WebGLProgram,
 ) => {
   //   var positionAttribLocation = gl.getAttribLocation(program, "vertPosition");
-  var colorAttribLocation = gl.getAttribLocation(program, "vertColor");
+  var colorAttribLocation = gl.getAttribLocation(program, 'vertColor')
 
   //   gl.vertexAttribPointer(
   //     positionAttribLocation, // Attribute location
@@ -21,9 +21,9 @@ export const getVertexColor = (
     // @ts-expect-error:
     gl.FALSE,
     5 * Float32Array.BYTES_PER_ELEMENT, // Size of an individual vertex
-    2 * Float32Array.BYTES_PER_ELEMENT // Offset from the beginning of a single vertex to this attribute
-  );
+    2 * Float32Array.BYTES_PER_ELEMENT, // Offset from the beginning of a single vertex to this attribute
+  )
 
   //   gl.enableVertexAttribArray(positionAttribLocation);
-  gl.enableVertexAttribArray(colorAttribLocation);
-};
+  gl.enableVertexAttribArray(colorAttribLocation)
+}
