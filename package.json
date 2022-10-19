@@ -17,6 +17,7 @@
   "scripts": {
     "build": "yarn webpack",
     "start": "yarn build && open static/index.html",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   }
 }
