@@ -1,10 +1,15 @@
 export const FRAGMENT_SHADER_TEXT = [
-  'precision mediump float;',
+  '#version 300 es',
   '',
-  'varying vec3 fragColor;',
+  'precision highp float;',
+  '',
+  'in vec3 out_color;',
+  '',
+  'out vec4 frag_color;',
+  '',
   'void main()',
   '{',
-  '  gl_FragColor = vec4(fragColor, 1.0);',
+  '  frag_color = vec4(out_color, 1.0);',
   '}',
 ].join('\n')
 

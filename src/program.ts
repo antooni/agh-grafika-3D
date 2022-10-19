@@ -1,6 +1,6 @@
 import { setupFragmentShader } from './shaders/fragment/fragmentShader'
-import { getVertexColor } from './shaders/vertex/params/getColor'
-import { getVertexPosition } from './shaders/vertex/params/getVertPosition'
+import { color } from './shaders/vertex/params/color'
+import { position } from './shaders/vertex/params/position'
 import { setupVertexShader } from './shaders/vertex/vertexShader'
 
 export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
@@ -10,10 +10,11 @@ export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   const vertexShader = setupVertexShader(gl)
   const fragmentShader = setupFragmentShader(gl)
 
-  var program = gl.createProgram()
+  const program = gl.createProgram()
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
   gl.linkProgram(program)
+
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     console.error('ERROR linking program!', gl.getProgramInfoLog(program))
     return
@@ -27,8 +28,10 @@ export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   //
   // set shader attributes
   //
-  getVertexPosition(gl, program)
-  getVertexColor(gl, program)
+  position(gl,program)
+  color(gl,program)
+
+  gl.useProgram(program)
 
   return program
 }

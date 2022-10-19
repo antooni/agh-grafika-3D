@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "gl-matrix": "^3.4.3",
     "open": "^8.4.0",
     "prettier": "^2.7.1",
     "ts-loader": "^9.4.1",
