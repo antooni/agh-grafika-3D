@@ -1,10 +1,10 @@
 /// <reference path="../node_modules/webgl-strict-types/index.d.ts" />
 import * as GLM from 'gl-matrix'
 
-import { bindBuffer } from './buffer'
+import { setupBuffer } from './setup/setupBuffer'
 import { clear } from './helpers/clear'
-import { setupProgram } from './program'
-import { setupGL } from './setupGL'
+import { setupProgram } from './setup/setupProgram'
+import { setupGL } from './setup/setupGL'
 import { createModel, setupModel } from './uniforms/model'
 import { createProj, setupProj } from './uniforms/proj'
 import { createView, setupView } from './uniforms/view'
@@ -104,7 +104,7 @@ function ustaw_kamere() {
 }
 
 const gl = setupGL(ustaw_kamere_mysz)
-bindBuffer(gl, KOSTKA)
+setupBuffer(gl, KOSTKA)
 const program = setupProgram(gl)
 
 const view = createView()

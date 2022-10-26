@@ -1,4 +1,4 @@
-export const bindBuffer = (
+export const setupBuffer = (
   gl: WebGLRenderingContextStrict,
   vertices: number[],
 ) => {

@@ -1,7 +1,7 @@
-import { setupFragmentShader } from './shaders/fragment/fragmentShader'
-import { color } from './shaders/vertex/params/color'
-import { position } from './shaders/vertex/params/position'
-import { setupVertexShader } from './shaders/vertex/vertexShader'
+import { setupFragmentShader } from '../shaders/fragment/fragmentShader'
+import { color } from '../shaders/vertex/params/color'
+import { position } from '../shaders/vertex/params/position'
+import { setupVertexShader } from '../shaders/vertex/vertexShader'
 
 export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   //
