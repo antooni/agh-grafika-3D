@@ -15,15 +15,36 @@ import { attachEventListeners } from './helpers/eventListeners'
 const pressedKey: Record<string, boolean> = {}
 attachEventListeners(pressedKey)
 
+/* VARIABLES */
+let yaw = -90 //obrót względem osi X
+let pitch = 0 //obrót względem osi
+
+let counter = 0
+let startTime = 0
+let elapsedTime = 0
+
+let cameraPosition = GLM.vec3.fromValues(0, 0, 3)
+let cameraFront = GLM.vec3.fromValues(0, 0, -1)
+const cameraUp = GLM.vec3.fromValues(0, 1, 0)
+
+/* SETUP */
+const gl = setupGL(setupCameraMouse)
+setupBuffer(gl, KOSTKA)
+const program = setupProgram(gl)
+const view = createView()
+const proj = createProj(gl)
+const model = createModel()
+
+/* RUNTIME */
 function draw() {
   clear(gl)
 
-  const [newElapsed, newCounter] = calcCounter(licznik, startTime)
+  const [newElapsed, newCounter] = calcCounter(counter, startTime)
   elapsedTime = newElapsed
   startTime = performance.now()
-  licznik = newCounter
+  counter = newCounter
 
-  ustaw_kamere()
+  setupCamera()
 
   setupModel(gl, program, model)
   setupView(gl, program, view)
@@ -35,14 +56,9 @@ function draw() {
 }
 window.requestAnimationFrame(draw)
 
-let yaw = -90 //obrót względem osi X
-let pitch = 0 //obrót względem osi
-let licznik = 0
-let startTime = 0
-let elapsedTime = 0
-
+/* Camera functions */
 // @ts-expect-error:
-const ustaw_kamere_mysz = (e) => {
+function setupCameraMouse (e) {
   let xoffset = e.movementX
   let yoffset = e.movementY
   let sensitivity = 0.1
@@ -65,65 +81,51 @@ const ustaw_kamere_mysz = (e) => {
   front[2] =
     Math.sin(GLM.glMatrix.toRadian(yaw)) *
     Math.cos(GLM.glMatrix.toRadian(pitch))
-  GLM.vec3.normalize(cam_front, front)
+  GLM.vec3.normalize(cameraFront, front)
 }
 
-const cam_speed = 0.02
-let cam_pos = GLM.vec3.fromValues(0, 0, 3)
-let cam_front = GLM.vec3.fromValues(0, 0, -1)
-const cam_up = GLM.vec3.fromValues(0, 1, 0)
-let cam_rot = 0.0
-
-function ustaw_kamere() {
+function setupCamera() {
   let cameraSpeed = 0.005 * elapsedTime
-  let cam_front_tmp = GLM.vec3.fromValues(1, 1, 1)
+  let cameraFrontTmp = GLM.vec3.fromValues(1, 1, 1)
   if (pressedKey['38']) {
     //Up
-    cam_pos[0] += cameraSpeed * cam_front[0]
-    cam_pos[1] += cameraSpeed * cam_front[1]
-    cam_pos[2] += cameraSpeed * cam_front[2]
+    cameraPosition[0] += cameraSpeed * cameraFront[0]
+    cameraPosition[1] += cameraSpeed * cameraFront[1]
+    cameraPosition[2] += cameraSpeed * cameraFront[2]
   }
   if (pressedKey['40']) {
     //down
-    cam_pos[0] -= cameraSpeed * cam_front[0]
-    cam_pos[1] -= cameraSpeed * cam_front[1]
-    cam_pos[2] -= cameraSpeed * cam_front[2]
+    cameraPosition[0] -= cameraSpeed * cameraFront[0]
+    cameraPosition[1] -= cameraSpeed * cameraFront[1]
+    cameraPosition[2] -= cameraSpeed * cameraFront[2]
   }
   if (pressedKey['37']) {
     //left
-    let cam_pos_temp = GLM.vec3.fromValues(1, 1, 1)
+    let cameraPositionTmp = GLM.vec3.fromValues(1, 1, 1)
     let cross = GLM.vec3.fromValues(1, 1, 1)
-    GLM.vec3.cross(cross, cam_front, cam_up)
-    GLM.vec3.normalize(cam_pos_temp, cross)
-    cam_pos[0] -= cam_pos_temp[0] * cameraSpeed
-    cam_pos[1] -= cam_pos_temp[1] * cameraSpeed
-    cam_pos[2] -= cam_pos_temp[2] * cameraSpeed
+    GLM.vec3.cross(cross, cameraFront, cameraUp)
+    GLM.vec3.normalize(cameraPositionTmp, cross)
+    cameraPosition[0] -= cameraPositionTmp[0] * cameraSpeed
+    cameraPosition[1] -= cameraPositionTmp[1] * cameraSpeed
+    cameraPosition[2] -= cameraPositionTmp[2] * cameraSpeed
   }
 
   if (pressedKey['39']) {
     //right
-    let cam_pos_temp = GLM.vec3.fromValues(1, 1, 1)
+    let cameraPositionTmp = GLM.vec3.fromValues(1, 1, 1)
     let cross = GLM.vec3.fromValues(1, 1, 1)
-    GLM.vec3.cross(cross, cam_front, cam_up)
-    GLM.vec3.normalize(cam_pos_temp, cross)
-    cam_pos[0] += cam_pos_temp[0] * cameraSpeed
-    cam_pos[1] += cam_pos_temp[1] * cameraSpeed
-    cam_pos[2] += cam_pos_temp[2] * cameraSpeed
+    GLM.vec3.cross(cross, cameraFront, cameraUp)
+    GLM.vec3.normalize(cameraPositionTmp, cross)
+    cameraPosition[0] += cameraPositionTmp[0] * cameraSpeed
+    cameraPosition[1] += cameraPositionTmp[1] * cameraSpeed
+    cameraPosition[2] += cameraPositionTmp[2] * cameraSpeed
   }
 
   let uniView = gl.getUniformLocation(program, 'view')
   gl.uniformMatrix4fv(uniView, false, view)
 
-  cam_front_tmp[0] = cam_pos[0] + cam_front[0]
-  cam_front_tmp[1] = cam_pos[1] + cam_front[1]
-  cam_front_tmp[2] = cam_pos[2] + cam_front[2]
-  GLM.mat4.lookAt(view, cam_pos, cam_front_tmp, cam_up)
+  cameraFrontTmp[0] = cameraPosition[0] + cameraFront[0]
+  cameraFrontTmp[1] = cameraPosition[1] + cameraFront[1]
+  cameraFrontTmp[2] = cameraPosition[2] + cameraFront[2]
+  GLM.mat4.lookAt(view, cameraPosition, cameraFrontTmp, cameraUp)
 }
-
-const gl = setupGL(ustaw_kamere_mysz)
-setupBuffer(gl, KOSTKA)
-const program = setupProgram(gl)
-
-const view = createView()
-const proj = createProj(gl)
-const model = createModel()
