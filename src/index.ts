@@ -10,6 +10,10 @@ import { createProj, setupProj } from './uniforms/proj'
 import { createView, setupView } from './uniforms/view'
 import { KOSTKA } from './vertices/KOSTKA'
 import { calcCounter } from './helpers/fps'
+import { attachEventListeners } from './helpers/eventListeners'
+
+const pressedKey: Record<string, boolean> = {}
+attachEventListeners(pressedKey)
 
 function draw() {
   clear(gl)
@@ -30,16 +34,6 @@ function draw() {
   window.requestAnimationFrame(draw)
 }
 window.requestAnimationFrame(draw)
-
-
-
-const pressedKey: Record<string, boolean> = {}
-window.onkeyup = function (e: KeyboardEvent) {
-  pressedKey[e.keyCode] = false
-}
-window.onkeydown = function (e: KeyboardEvent) {
-  pressedKey[e.keyCode] = true
-}
 
 let yaw = -90 //obrót względem osi X
 let pitch = 0 //obrót względem osi
@@ -133,5 +127,3 @@ const program = setupProgram(gl)
 const view = createView()
 const proj = createProj(gl)
 const model = createModel()
-
-
