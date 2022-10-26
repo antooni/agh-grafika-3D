@@ -9,7 +9,7 @@ export const setupGL = (ustaw_kamere_mysz): WebGLRenderingContextStrict => {
 
   if (!gl) {
     console.log('WebGL not supported, falling back on experimental-webgl')
-    // @ts-expect-error:
+    // @ts-expect-error:  
     gl = canvas.getContext('experimental-webgl')
   }
 
