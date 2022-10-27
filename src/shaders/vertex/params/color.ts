@@ -4,5 +4,5 @@ export const color = (
 ) => {
   const colorAttrib = gl.getAttribLocation(program, 'color')
   gl.enableVertexAttribArray(colorAttrib)
-  gl.vertexAttribPointer(colorAttrib, 3, gl.FLOAT, false, 6 * 4, 3 * 4)
+  gl.vertexAttribPointer(colorAttrib, 3, gl.FLOAT, false, 8 * 4, 3 * 4)
 }

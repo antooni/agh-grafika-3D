@@ -1,4 +1,5 @@
 import { setupFragmentShader } from '../shaders/fragment/fragmentShader'
+import { aTexCoord } from '../shaders/vertex/params/aTexCoord'
 import { color } from '../shaders/vertex/params/color'
 import { position } from '../shaders/vertex/params/position'
 import { setupVertexShader } from '../shaders/vertex/vertexShader'
@@ -30,6 +31,7 @@ export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   //
   position(gl,program)
   color(gl,program)
+  aTexCoord(gl, program)
 
   gl.useProgram(program)
 
