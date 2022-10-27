@@ -34,6 +34,7 @@ const program = setupProgram(gl)
 const view = createView()
 const proj = createProj(gl)
 const model = createModel()
+gl.enable(gl.DEPTH_TEST)
 
 /* RUNTIME */
 function draw() {
