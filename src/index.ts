@@ -120,7 +120,7 @@ gl.bindTexture(gl.TEXTURE_2D, texture2)
 //****************************************************************
 
 gl.uniform1i(gl.getUniformLocation(program, 'texture1'), 0)
-gl.uniform1i(gl.getUniformLocation(program, "texture2"), 1);
+gl.uniform1i(gl.getUniformLocation(program, 'texture2'), 1)
 
 /* RUNTIME */
 function draw() {
@@ -137,25 +137,11 @@ function draw() {
   setupView(gl, program, view)
   setupProj(gl, program, proj)
 
-  // gl.activeTexture(gl.TEXTURE0)
-  // gl.bindTexture(gl.TEXTURE_2D, texture1)
-  // gl.drawArrays(gl.TRIANGLES, 0, 36)
+  /* remember to uncomment in fragmentShader!*/
+  // oneTexture()
+  // twoTextures()
 
-  // gl.activeTexture(gl.TEXTURE0)
-  // gl.bindTexture(gl.TEXTURE_2D, texture1)
-  // gl.activeTexture(gl.TEXTURE1)
-  // gl.bindTexture(gl.TEXTURE_2D, texture2)
-  // gl.drawArrays(gl.TRIANGLES, 0, 36)
-
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture2)
-  gl.drawArrays(gl.TRIANGLES, 0, 12)
-  gl.activeTexture(gl.TEXTURE0)
-  gl.bindTexture(gl.TEXTURE_2D, texture1)
-  gl.drawArrays(gl.TRIANGLES, 12, 24)
-
-
-  // gl.drawArrays(gl.TRIANGLES, 0, 36)
+  mixedTexture()
 
   window.requestAnimationFrame(draw)
 }
@@ -233,4 +219,27 @@ function setupCamera() {
   cameraFrontTmp[1] = cameraPosition[1] + cameraFront[1]
   cameraFrontTmp[2] = cameraPosition[2] + cameraFront[2]
   GLM.mat4.lookAt(view, cameraPosition, cameraFrontTmp, cameraUp)
+}
+
+const oneTexture = () => {
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture1)
+  gl.drawArrays(gl.TRIANGLES, 0, 36)
+}
+
+const mixedTexture = () => {
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture1)
+  gl.activeTexture(gl.TEXTURE1)
+  gl.bindTexture(gl.TEXTURE_2D, texture2)
+  gl.drawArrays(gl.TRIANGLES, 0, 36)
+}
+
+const twoTextures = () => {
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture2)
+  gl.drawArrays(gl.TRIANGLES, 0, 12)
+  gl.activeTexture(gl.TEXTURE0)
+  gl.bindTexture(gl.TEXTURE_2D, texture1)
+  gl.drawArrays(gl.TRIANGLES, 12, 24)
 }

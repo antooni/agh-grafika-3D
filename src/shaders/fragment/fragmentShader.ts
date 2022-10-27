@@ -13,7 +13,9 @@ export const FRAGMENT_SHADER_TEXT = [
   '',
   'void main()',
   '{',
+  /* uncomment for one and two textures*/
   ' frag_color = texture(texture1, TexCoord);',
+  /* uncomment for mixed mode */
   // 'frag_color = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.5);',
   '}',
 ].join('\n')
