@@ -28,6 +28,7 @@ let cameraFront = GLM.vec3.fromValues(0, 0, -1)
 const cameraUp = GLM.vec3.fromValues(0, 1, 0)
 
 /* SETUP */
+const canvas = document.getElementById('game-surface') as HTMLDivElement
 const gl = setupGL(setupCameraMouse)
 setupBuffer(gl, KOSTKA)
 const program = setupProgram(gl)
@@ -122,6 +123,72 @@ gl.bindTexture(gl.TEXTURE_2D, texture2)
 gl.uniform1i(gl.getUniformLocation(program, 'texture1'), 0)
 gl.uniform1i(gl.getUniformLocation(program, 'texture2'), 1)
 
+function StereoProjection(
+  _left: number,
+  _right: number,
+  _bottom: number,
+  _top: number,
+  _near: number,
+  _far: number,
+  _zero_plane: number,
+  _dist: number,
+  _eye: number,
+) {
+  debugger
+  // Perform the perspective projection for one eye's subfield.
+  // The projection is in the direction of the negative z-axis.
+  // _left=-6.0;
+  // _right=6.0;
+  // _bottom=-4.8;
+  // _top=4.8;
+  // [default: -6.0, 6.0, -4.8, 4.8]
+  // left, right, bottom, top = the coordinate range, in the plane of zero parallax setting,
+  // which will be displayed on the screen.
+  // The ratio between (right-left) and (top-bottom) should equal the aspect
+  // ratio of the display.
+  // _near=6.0;
+  // _far=-20.0;
+  // [default: 6.0, -6.0]
+  // near, far = the z-coordinate values of the clipping planes.
+  // _zero_plane=0.0;
+  // [default: 0.0]
+  // zero_plane = the z-coordinate of the plane of zero parallax setting.
+  // [default: 14.5]
+  // _dist=10.5;
+  // dist = the distance from the center of projection to the plane of zero parallax.
+  // [default: -0.3]
+  // _eye=-0.3;
+  // eye = half the eye separation; positive for the right eye subfield,
+  // negative for the left eye subfield.
+  let _dx = _right - _left
+  let _dy = _top - _bottom
+  let _xmid = (_right + _left) / 2.0
+  let _ymid = (_top + _bottom) / 2.0
+  let _clip_near = _dist + _zero_plane - _near
+  let _clip_far = _dist + _zero_plane - _far
+  let _n_over_d = _clip_near / _dist
+  let _topw = (_n_over_d * _dy) / 2.0
+  let _bottomw = -_topw
+  let _rightw = _n_over_d * (_dx / 2.0 - _eye)
+  let _leftw = _n_over_d * (-_dx / 2.0 - _eye)
+  const proj = GLM.mat4.create()
+  GLM.mat4.frustum(
+    proj,
+    _leftw,
+    _rightw,
+    _bottomw,
+    _topw,
+    _clip_near,
+    _clip_far,
+  )
+  GLM.mat4.translate(proj, proj, [-_xmid - _eye, -_ymid, 0])
+  let uniProj = gl.getUniformLocation(program, 'proj')
+  gl.uniformMatrix4fv(uniProj, false, proj)
+}
+
+let mode = 0
+let spacing = 0.1
+
 /* RUNTIME */
 function draw() {
   clear(gl)
@@ -140,8 +207,43 @@ function draw() {
   /* remember to uncomment in fragmentShader!*/
   // oneTexture()
   // twoTextures()
+  // mixedTexture()
 
-  mixedTexture()
+  if (mode === 0) {
+    // @ts-expect-error:
+    gl.viewport(0, 0, canvas.width, canvas.height) //cały obszar ekranu
+    oneTexture()
+  }
+
+  if (mode === 1) {
+    // @ts-expect-error:
+    gl.viewport(0, 0, canvas.width, canvas.height) //cały obszar ekranu
+
+    StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, -spacing) //projekcja dla lewego oka
+    gl.colorMask(true, false, false, false) //czerwony filtr
+    oneTexture()
+
+    gl.clear(gl.DEPTH_BUFFER_BIT)
+    StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, spacing) //projekcja dla prawego oka
+    gl.colorMask(false, false, true, false) //niebieski filtr
+    oneTexture()
+
+    gl.colorMask(true, true, true, true)
+  }
+
+  if (mode === 2) {
+    // @ts-expect-error:
+    gl.viewport(0, 0, canvas.width / 2, canvas.height) //cały obszar ekranu
+    StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, -0.05) //projekcja dla lewego oka
+
+    oneTexture()
+
+    // @ts-expect-error:
+    gl.viewport(canvas.width / 2, 0, canvas.width / 2, canvas.height) //cały obszar ekranu
+    StereoProjection(-6, 6, -4.8, 4.8, 12.99, -100, 0, 13, 0.05) //projekcja dla lewego oka
+
+    oneTexture()
+  }
 
   window.requestAnimationFrame(draw)
 }
@@ -210,6 +312,26 @@ function setupCamera() {
     cameraPosition[0] += cameraPositionTmp[0] * cameraSpeed
     cameraPosition[1] += cameraPositionTmp[1] * cameraSpeed
     cameraPosition[2] += cameraPositionTmp[2] * cameraSpeed
+  }
+
+  if (pressedKey['49']) {
+    mode = 0
+  }
+
+  if (pressedKey['50']) {
+    mode = 1
+  }
+
+  if (pressedKey['51']) {
+    mode = 2
+  }
+
+  if (pressedKey['52']) {
+    spacing += 0.01
+  }
+
+  if (pressedKey['53']) {
+    spacing -= 0.01
   }
 
   let uniView = gl.getUniformLocation(program, 'view')
