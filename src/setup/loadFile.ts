@@ -1,4 +1,4 @@
-async function loadFile(gl: WebGLRenderingContextStrict, file: File) {
+export async function loadFile(gl: WebGLRenderingContextStrict, file: File) {
   console.log('Loaded file: ', file.name)
   let text: string = await file.text()
   text = text.replaceAll('/', ' ')
