@@ -8,7 +8,8 @@
     "lib": ["ES2021.String", "dom"],
     "jsx": "react",
     "allowJs": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "isolatedModules": true
   },
   "includes": ["node_modules/webgl-strict-types/index.d.ts"]
 }

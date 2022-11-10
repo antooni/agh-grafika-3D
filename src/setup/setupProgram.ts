@@ -12,6 +12,7 @@ export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   const fragmentShader = setupFragmentShader(gl)
 
   const program = gl.createProgram()
+
   gl.attachShader(program, vertexShader)
   gl.attachShader(program, fragmentShader)
   gl.linkProgram(program)
