@@ -29,9 +29,11 @@ export const setupProgram = (gl: WebGLRenderingContextStrict): WebGLProgram => {
   //
   // set shader attributes
   //
-  position(gl,program)
-  color(gl,program)
+  position(gl, program)
+  color(gl, program)
   aTexCoord(gl, program)
+  gl.uniform1i(gl.getUniformLocation(program, 'texture1'), 0)
+  gl.uniform1i(gl.getUniformLocation(program, 'texture2'), 1)
 
   gl.useProgram(program)
 
