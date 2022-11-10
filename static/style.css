@@ -4,3 +4,8 @@ div
    color: pink;
    font-size: 34px;
 }
+
+input {
+   position: absolute;
+   top: 40px;
+}
