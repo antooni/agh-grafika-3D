@@ -1,4 +1,3 @@
-// @ts-nocheck
 /// <reference path="../node_modules/webgl-strict-types/index.d.ts" />
 import * as GLM from 'gl-matrix'
 
@@ -16,9 +15,10 @@ import { attachEventListeners } from './helpers/eventListeners'
 const pressedKey: Record<string, boolean> = {}
 attachEventListeners(pressedKey)
 
-const fileInput = document.getElementById("fff")
-fileInput.addEventListener("change", (event) => loadFile(event.target.files[0]))
-
+const fileInput = document.getElementById('fff') as HTMLInputElement
+fileInput.addEventListener('change', (event) =>
+  loadFile((event.target as HTMLInputElement).files[0]),
+)
 
 /* VARIABLES */
 let yaw = -90 //obrót względem osi X
@@ -213,7 +213,6 @@ function draw() {
 
   oneTexture()
 
-
   window.requestAnimationFrame(draw)
 }
 window.requestAnimationFrame(draw)
@@ -335,19 +334,19 @@ const twoTextures = () => {
   gl.drawArrays(gl.TRIANGLES, 12, 24)
 }
 
-async function loadFile(file) {
+async function loadFile(file: File) {
   console.log(file)
-  let text = await file.text()
+  let text: string = await file.text()
   text = text.replaceAll('/', ' ')
   text = text.replaceAll('\n', ' ')
   let arrayCopy = text.split(' ')
-  const vertices = [[]]
+  const vertices: number[][] = [[]]
   let licz_vertices = 0
-  const normals = [[]]
+  const normals: number[][] = [[]]
   let licz_normals = 0
-  const coords = [[]]
+  const coords: number[][] = [[]]
   let licz_coords = 0
-  const triangles = []
+  const triangles: number[][] = []
   let licz_triangles = 0
   for (let i = 0; i < arrayCopy.length - 1; i++) {
     if (arrayCopy[i] == 'v') {
