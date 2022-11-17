@@ -39,8 +39,7 @@ const hrefTexture3 =
   'https://thumbs.dreamstime.com/b/old-textured-low-quality-paper-as-abstract-background-texture-31007622.jpg'
 const hrefTexture4 =
   'https://img.itch.zone/aW1hZ2UvNTU3OTYxLzQ5NDQ1MDguanBn/347x500/RwemBL.jpg'
-const hrefTexture5 =
-  'https://img.freepik.com/fotos-premium/textura-padrao-de-areia-na-praia-tropical-areia-marrom-para-o-fundo-fechar-se_64749-4065.jpg'
+const hrefTexture5 = 'https://cdn.eso.org/images/thumb700x/potw2046a.jpg'
 
 /* SETUP */
 const gl = setupGL(setupCameraMouse)
