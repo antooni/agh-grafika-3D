@@ -1,4 +1,10 @@
-export async function loadFile(gl: WebGLRenderingContextStrict, file: File) {
+export async function loadFile(
+  gl: WebGLRenderingContextStrict,
+  file: File,
+): Promise<{
+  points: number
+  vert_array: number[]
+}> {
   console.log('Loaded file: ', file.name)
   let text: string = await file.text()
   text = text.replaceAll('/', ' ')
@@ -44,7 +50,7 @@ export async function loadFile(gl: WebGLRenderingContextStrict, file: File) {
       licz_triangles++
     }
   }
-  let vert_array = []
+  let vert_array: number[] = []
   for (let i = 0; i < triangles.length; i++) {
     vert_array.push(vertices[triangles[i][0] - 1][0])
     vert_array.push(vertices[triangles[i][0] - 1][1])
@@ -71,7 +77,10 @@ export async function loadFile(gl: WebGLRenderingContextStrict, file: File) {
     vert_array.push(coords[triangles[i][7] - 1][0])
     vert_array.push(coords[triangles[i][7] - 1][1])
   }
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vert_array), gl.STATIC_DRAW)
+  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vert_array), gl.STATIC_DRAW)
 
-  return triangles.length * 3
+  return {
+    points: triangles.length * 3,
+    vert_array,
+  }
 }

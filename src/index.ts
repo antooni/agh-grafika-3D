@@ -13,6 +13,9 @@ import { calcCounter } from './helpers/fps'
 import { attachEventListeners } from './helpers/eventListeners'
 import { createTexture } from './textures/texture1'
 import { loadFile } from './setup/loadFile'
+import { position } from './shaders/vertex/params/position'
+import { color } from './shaders/vertex/params/color'
+import { aTexCoord } from './shaders/vertex/params/aTexCoord'
 
 /* VARIABLES */
 let yaw = -90 //obrót względem osi X
@@ -32,6 +35,12 @@ const hrefTexture1 =
   'https://cdn.pixabay.com/photo/2013/09/22/19/14/brick-wall-185081_960_720.jpg'
 const hrefTexture2 =
   'https://unblast.com/wp-content/uploads/2020/04/Concrete-Texture-1.jpg'
+const hrefTexture3 =
+  'https://thumbs.dreamstime.com/b/old-textured-low-quality-paper-as-abstract-background-texture-31007622.jpg'
+const hrefTexture4 =
+  'https://img.itch.zone/aW1hZ2UvNTU3OTYxLzQ5NDQ1MDguanBn/347x500/RwemBL.jpg'
+const hrefTexture5 =
+  'https://img.freepik.com/fotos-premium/textura-padrao-de-areia-na-praia-tropical-areia-marrom-para-o-fundo-fechar-se_64749-4065.jpg'
 
 /* SETUP */
 const gl = setupGL(setupCameraMouse)
@@ -41,9 +50,17 @@ const view = createView()
 const proj = createProj(gl)
 const model = createModel()
 
+let pointsArr: number[] = []
+let buffers: WebGLBuffer[] = []
+
 const fileInput = document.getElementById('fff') as HTMLInputElement
 fileInput.addEventListener('change', async (event) => {
-  points = await loadFile(gl, (event.target as HTMLInputElement).files[0])
+  let res = await loadFile(gl, (event.target as HTMLInputElement).files[0])
+  pointsArr.push(res.points)
+  let buff = setupBuffer(gl, res.vert_array)
+  buffers.push(buff)
+  console.log(pointsArr)
+  console.log(buffers)
 })
 
 const pressedKey: Record<string, boolean> = {}
@@ -51,6 +68,11 @@ attachEventListeners(pressedKey)
 
 const texture1 = createTexture(gl, hrefTexture1)
 const texture2 = createTexture(gl, hrefTexture2)
+const texture3 = createTexture(gl, hrefTexture3)
+const texture4 = createTexture(gl, hrefTexture4)
+const texture5 = createTexture(gl, hrefTexture5)
+
+const textures = [texture1, texture2, texture3, texture4, texture5]
 
 /* RUNTIME */
 function draw() {
@@ -67,7 +89,14 @@ function draw() {
   setupView(gl, program, view)
   setupProj(gl, program, proj)
 
-  oneTexture()
+  for (let i = 0; i < pointsArr.length; i++) {
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers[i])
+    position(gl, program)
+    color(gl, program)
+    aTexCoord(gl, program)
+    gl.bindTexture(gl.TEXTURE_2D, textures[i])
+    gl.drawArrays(gl.TRIANGLES, 0, pointsArr[i])
+  }
 
   window.requestAnimationFrame(draw)
 }
