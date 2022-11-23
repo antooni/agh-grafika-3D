@@ -6,6 +6,4 @@
 
 3. `yarn`
 
-4. `yarn webpack`
-
-5. `run src/index.html in your browser`
+4. `yarn start`
